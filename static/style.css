@@ -1,0 +1,134 @@
+@import url('reset.css');
+
+body {
+	background: black;
+	color: white;
+	font-family: monospace;
+}
+
+em {
+	font-style: italic;
+}
+
+h1 {
+	padding: 1em;
+}
+
+h1 a {
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	border-bottom: 2px solid white;
+}
+
+p {
+	padding: 1em;
+}
+
+a {
+	color: red;
+	text-decoration: none;
+}
+
+section a {
+	display: block;
+	float:left;
+	width: 200px;
+	height: 200px;
+	background-position: center;
+}
+
+section a span {
+	display: none;
+}
+
+section a:hover span, p.description span {
+	display: inline-block;
+	background: white;
+	padding: 0.5em;
+	line-height: 1.5;
+	color: black;
+}
+
+p.description {
+	color:gray;
+}
+
+p a.original {
+	display:inline;
+	color: white;
+}
+
+p.pagination {
+	padding-left: 0.5em
+}
+
+p.pagination a {
+	display: inline-block;
+	padding: 0.5em
+}
+
+footer {
+	font-style: italic;
+	color: gray;
+}
+
+footer p a {
+	color: gray;
+	border-bottom: 1px dotted gray;
+}
+
+body.login {
+	background: lightgreen;
+	color: black;
+}
+
+form.login {
+	display: block;
+	width: 200px;
+	margin: 5em auto;
+	padding: 1em;
+}
+
+form input {
+	background: white;
+	border: none;
+	width: 200px;
+	padding: 0.5em;
+	font-family: monospace;
+	margin-top: 1em;
+}
+
+form input[type="submit"] {
+	background: black;
+	color: white;
+	width: 216px;
+}
+
+form label {
+	text-align: center;
+	font-weight: bold;
+	width: 200px;
+	display: block;
+	margin: 0 0 1em 0;
+}
+
+form.login p {
+	text-align: center;
+}
+
+body.error {
+	background: red;
+}
+
+body.error p {
+	text-align: center;
+	margin-top: 5em;
+	font-weight: bold;
+}
+
+body.add {
+	padding-top: 5em;
+	background: lightblue;
+	text-align: center;
+}

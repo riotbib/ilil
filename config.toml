@@ -1,0 +1,13 @@
+title = "ilil"
+
+[owner]
+name = "username"
+mail = "username@example.org"
+description = "This is an insta-like image log. :^)"
+
+[server]
+host = "localhost"
+port = "80"
+password = "hackme"
+itemsPerPage = 100
+enableDownload = false
