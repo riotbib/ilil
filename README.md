@@ -1,4 +1,3 @@
-ilil
-====
+# ilil
 
-insta-like image log
+`ilil` is an insta-like image log.
