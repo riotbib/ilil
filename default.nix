@@ -123,7 +123,7 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${ilil}/bin/ilil.py \
-          -c /var/www/ilil/config.toml \
+          -c ${ililConfig} \
           -p ${cfg.serverPath}
         '';
 
