@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>login &ndahs; ilil</title>
+	<title>login &ndash; ilil</title>
 	<link rel="stylesheet" href="/static/style.css"/>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 </head>

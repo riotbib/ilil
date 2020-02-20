@@ -3,7 +3,7 @@
 
 % parsedData = toml.load("data.toml")
 % parsedConfig = toml.load("config.toml")
-% imageDescription = parsedData['data'][timeStamp]
+% imageDescription = parsedData[timeStamp]
 % fileName = "{timeStamp}.jpg".format(timeStamp=timeStamp)
 % if imageDescription:
 	<p class="description"><span>{{imageDescription}}</span> {{timeStamp}}</p>

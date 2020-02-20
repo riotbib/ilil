@@ -1,14 +1,24 @@
+#!/usr/bin/env python3
 from bottle import Bottle, run, get, post, request, route, template, response, redirect, view, os, static_file, error 
 import time 
 from datetime import datetime
 from PIL import Image
 import toml
 import numpy
+import sys
+import argparse
 
 app = Bottle()
 
-parsedConfig = toml.load("config.toml")
-parsedData = toml.load("data.toml")
+
+parseArguments = argparse.ArgumentParser(description='ilil')
+parseArguments.add_argument('-c', '--config', required=True)
+parseArguments.add_argument('-p', '--path', required=True)
+arguments = parseArguments.parse_args()
+
+parsedConfig = toml.load(arguments.config)
+loadDataToml = arguments.path+"/data.toml"
+parsedData = toml.load(loadDataToml)
 
 
 @app.route('/page/<page>')
@@ -92,22 +102,22 @@ def do_add():
         datetimestamp = datetime.now()
         timestamp = datetimestamp.strftime("%Y%m%d%H%M%S")
         
-        save_path = "originals/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
+        save_path = arguments.path+"originals/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
         upload.save(save_path) # appends upload.filename automatically
 
         thumbSize = (300, 300)
         thumb = Image.open(save_path)
         thumb.thumbnail(thumbSize)
-        thumbSavePath = "thumbs/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
+        thumbSavePath = arguments.path+"thumbs/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
         thumb.save(thumbSavePath)
 
         picSize = (900, 900)
         pic = Image.open(save_path)
         pic.thumbnail(picSize)
-        picSavePath = "pictures/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
+        picSavePath = arguments.path+"pictures/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
         pic.save(picSavePath)
 
-        with open("data.toml", "a") as dataFile:
+        with open(loadDataToml, "a") as dataFile:
             writeToData = '{timestamp} = "{description}"\n'.format(timestamp=timestamp,description=description)
             dataFile.write(writeToData)
 
@@ -123,22 +133,22 @@ def id(timeStamp):
 
 @app.route('/thumbs/<filename>')
 def thumb(filename):
-    return static_file(filename, root="./thumbs/")
+    return static_file(filename, root=arguments.path+"/thumbs/")
 
 @app.route('/pictures/<filename>')
 def pictures(filename):
-    return static_file(filename, root="./pictures/")
+    return static_file(filename, root=arguments.path+"/pictures/")
 
 @app.route('/originals/<filename>')
 def originals(filename):
     if parsedConfig['server']['enableDownload']:
-        return static_file(filename, root="./originals/")
+        return static_file(filename, root=arguments.path+"/originals/")
     else:
         return template('error')
 
 @app.route('/static/<filename>')
 def static(filename):
-    return static_file(filename, root="./static/")
+    return static_file(filename, root=arguments.path+"/static/")
 
 @app.error(404)
 def error404(error):
