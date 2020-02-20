@@ -18,31 +18,32 @@ let
       };
 
       shellHook = ''
-        touch $cfg.serverPath/data.toml
+        cp -r views $out/bin/
       '';
 
     };
 
     ilil-uid = 9161;
 
-    cfg = config.services.ilil;
 
     ililConfig = pkgs.writeText "config.toml" ''
-      title = "${cfg.title}"
+      title = '${cfg.title}'
 
       [owner]
-      name = "${cfg.ownerName}"
-      mail = "${cfg.ownerMail}"
-      description = "${cfg.ownerDescription}"
+      name = '${cfg.ownerName}'
+      mail = '${cfg.ownerMail}'
+      description = '${cfg.ownerDescription}'
 
       [server]
-      host = "${cfg.serverHost}"
-      port = "${cfg.serverPort}"
-      password = "${cfg.serverPassword}"
-      itemsPerPage = "${cfg.serverItemsPerPage}"
-      enableDownload = "${cfg.serverEnableDownload}"
-      path = "${cfg.serverPath}"
+      host = '${cfg.serverHost}'
+      port = '${cfg.serverPort}'
+      password = '${cfg.serverPassword}'
+      itemsPerPage = '${cfg.serverItemsPerPage}'
+      enableDownload = '${cfg.serverEnableDownload}'
+      path = '${cfg.serverPath}'
     '';
+
+    cfg = config.services.ilil;
 
 in {
   options.services.ilil = {
@@ -121,7 +122,9 @@ in {
 
       serviceConfig = {
         ExecStart = ''
-          ${ilil}/bin/ilil.py -c ${ililConfig} -p ${cfg.serverPath}
+          ${ilil}/bin/ilil.py \
+          -c /var/www/ilil/config.toml \
+          -p ${cfg.serverPath}
         '';
 
         Type = "simple";
