@@ -4,12 +4,15 @@ import time
 from datetime import datetime
 from PIL import Image
 import toml
-import numpy
-import sys
 import argparse
+from bottle import TEMPLATE_PATH
+import os
+
+abs_app_dir_path = os.path.dirname(os.path.realpath(__file__))
+abs_views_path = os.path.join(abs_app_dir_path, 'views')
+TEMPLATE_PATH.insert(0, abs_views_path )
 
 app = Bottle()
-
 
 parseArguments = argparse.ArgumentParser(description='ilil')
 parseArguments.add_argument('-c', '--config', required=True)
@@ -28,10 +31,10 @@ def pagination(page):
 
         page = int(page) - 1 
         itemsPerPage = parsedConfig['server']['itemsPerPage'] 
-        getDirectory = os.listdir("thumbs")
+        getDirectory = os.listdir(arguments.path+"/thumbs")
         getDirectory = getDirectory[::-1]
         totalNumberOfImages = len(getDirectory)
-        totalNumberOfPages = -(-totalNumberOfImages // itemsPerPage)
+        totalNumberOfPages = - ( - int(totalNumberOfImages ) // int(itemsPerPage))
 
         if totalNumberOfImages == 0: 
             return template('error')
@@ -102,19 +105,19 @@ def do_add():
         datetimestamp = datetime.now()
         timestamp = datetimestamp.strftime("%Y%m%d%H%M%S")
         
-        save_path = arguments.path+"originals/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
+        save_path = arguments.path+"/originals/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
         upload.save(save_path) # appends upload.filename automatically
 
         thumbSize = (300, 300)
         thumb = Image.open(save_path)
         thumb.thumbnail(thumbSize)
-        thumbSavePath = arguments.path+"thumbs/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
+        thumbSavePath = arguments.path+"/thumbs/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
         thumb.save(thumbSavePath)
 
         picSize = (900, 900)
         pic = Image.open(save_path)
         pic.thumbnail(picSize)
-        picSavePath = arguments.path+"pictures/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
+        picSavePath = arguments.path+"/pictures/{timestamp}{ext}".format(timestamp=timestamp,ext=ext)
         pic.save(picSavePath)
 
         with open(loadDataToml, "a") as dataFile:

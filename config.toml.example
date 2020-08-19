@@ -7,7 +7,7 @@ description = "This is an insta-like image log. :^)"
 
 [server]
 host = "localhost"
-port = "80"
+port = "1312"
 password = "hackme"
 itemsPerPage = 100
 enableDownload = false

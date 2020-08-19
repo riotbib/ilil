@@ -5,7 +5,7 @@ with lib;
 let
     ilil = pkgs.python3.pkgs.buildPythonApplication {
       pname = "ilil";
-      version = "unstable-20191022";
+      version = "unstable-20200819g";
 
       src = lib.cleanSource ./.; 
 
@@ -17,30 +17,31 @@ let
         license = lib.licenses.gpl3;
       };
 
-      shellHook = ''
-        cp -r views $out/bin/
+      installPhase = ''
+        mkdir -p $out/bin
+        cp $src/ilil.py $out/bin
+        cp -r $src/views $out/bin 
       '';
 
     };
 
     ilil-uid = 9161;
 
-
     ililConfig = pkgs.writeText "config.toml" ''
-      title = '${cfg.title}'
+        title = '${cfg.title}'
 
-      [owner]
-      name = '${cfg.ownerName}'
-      mail = '${cfg.ownerMail}'
-      description = '${cfg.ownerDescription}'
+        [owner]
+        name = '${cfg.ownerName}'
+        mail = '${cfg.ownerMail}'
+        description = '${cfg.ownerDescription}'
 
-      [server]
-      host = '${cfg.serverHost}'
-      port = '${cfg.serverPort}'
-      password = '${cfg.serverPassword}'
-      itemsPerPage = '${cfg.serverItemsPerPage}'
-      enableDownload = '${cfg.serverEnableDownload}'
-      path = '${cfg.serverPath}'
+        [server]
+        host = '${cfg.serverHost}'
+        port = '${toString cfg.serverPort}'
+        password = '${cfg.serverPassword}'
+        itemsPerPage = '${toString cfg.serverItemsPerPage}'
+        enableDownload = '${boolToString cfg.serverEnableDownload}'
+        path = '${cfg.serverPath}'
     '';
 
     cfg = config.services.ilil;
@@ -61,13 +62,12 @@ in {
     };
 
     ownerMail = mkOption {
-      example = "username@example.com";
       type = types.str;
       description = "Mail address of the owner";
     };
 
     ownerDescription = mkOption {
-      default = "This is an insta-like image log. :^)";
+      default = "This is an insta-like image log.";
       type = types.str;
       description = "Description of the log";
     };
@@ -87,7 +87,7 @@ in {
     serverPassword = mkOption {
       default = "hackme";
       type = types.str;
-      description = "Server password to use, please change it!";
+      description = "Server password to use";
     };
 
     serverItemsPerPage = mkOption {
@@ -108,7 +108,6 @@ in {
       description = "Directory for ilil's store";
     };
 
-
   };
 
   config = mkIf cfg.enable {
@@ -123,8 +122,8 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${ilil}/bin/ilil.py \
-          -c ${ililConfig} \
-          -p ${cfg.serverPath}
+            -c ${ililConfig} \
+            -p ${cfg.serverPath}
         '';
 
         Type = "simple";
@@ -146,7 +145,3 @@ in {
   };
 
 }
-
-
-
-
