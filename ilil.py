@@ -7,6 +7,8 @@ import toml
 import argparse
 from bottle import TEMPLATE_PATH
 import os
+import numpy
+import sys
 
 abs_app_dir_path = os.path.dirname(os.path.realpath(__file__))
 abs_views_path = os.path.join(abs_app_dir_path, 'views')
@@ -34,7 +36,7 @@ def pagination(page):
         getDirectory = os.listdir(arguments.path+"/thumbs")
         getDirectory = getDirectory[::-1]
         totalNumberOfImages = len(getDirectory)
-        totalNumberOfPages = - ( - int(totalNumberOfImages ) // int(itemsPerPage))
+        totalNumberOfPages = - ( - int(totalNumberOfImages) // int(itemsPerPage))
 
         if totalNumberOfImages == 0: 
             return template('error')
@@ -46,9 +48,9 @@ def pagination(page):
             def divide_chunks(l, n): 
                 for i in range(0, len(l), n):  
                     yield l[i:i + n] 
-            listOfImages = list(divide_chunks(getDirectory, itemsPerPage)) 
+            listOfImages = list(divide_chunks(getDirectory, int(itemsPerPage)))
     
-            return template('page', title=parsedConfig['title'], name=parsedConfig['owner']['name'], mail=parsedConfig['owner']['mail'], description=parsedConfig['owner']['description'], page=int(page), totalNumberOfImages=totalNumberOfImages, totalNumberOfPages=totalNumberOfPages, imagesPerPage=listOfImages[page], loggedIn=loggedIn)
+            return template('page', title=parsedConfig['title'], name=parsedConfig['owner']['name'], mail=parsedConfig['owner']['mail'], description=parsedConfig['owner']['description'], page=int(page), totalNumberOfImages=totalNumberOfImages, totalNumberOfPages=totalNumberOfPages, imagesPerPage=listOfImages[page], parsedData=parsedData, loggedIn=loggedIn)
 
     else:
         return template('error')
@@ -131,8 +133,8 @@ def do_add():
 
 @app.route('/id/<timeStamp>')
 def id(timeStamp):
-    loggedIn = request.get_cookie("login", secret='some-secret-key')
-    return template('id', title=parsedConfig['title'], name=parsedConfig['owner']['name'], mail=parsedConfig['owner']['mail'], description=parsedConfig['owner']['description'], timeStamp=timeStamp, loggedIn=loggedIn)
+    loggedIn = request.get_cookie("login", secret='some-secret-key') # please change, lol
+    return template('id', title=parsedConfig['title'], name=parsedConfig['owner']['name'], mail=parsedConfig['owner']['mail'], description=parsedConfig['owner']['description'], timeStamp=timeStamp, arguments=arguments, parsedData=parsedData, loggedIn=loggedIn)
 
 @app.route('/thumbs/<filename>')
 def thumb(filename):
@@ -144,10 +146,7 @@ def pictures(filename):
 
 @app.route('/originals/<filename>')
 def originals(filename):
-    if parsedConfig['server']['enableDownload']:
-        return static_file(filename, root=arguments.path+"/originals/")
-    else:
-        return template('error')
+    return static_file(filename, root=arguments.path+"/originals/")
 
 @app.route('/static/<filename>')
 def static(filename):

@@ -3,7 +3,7 @@
 
 <section>
 % for filename in imagesPerPage:
-%	include('single.tpl', filename=filename)
+%	include('single.tpl', filename=filename, parsedData=parsedData)
 % end
 </section>
 

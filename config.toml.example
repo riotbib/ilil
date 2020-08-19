@@ -10,5 +10,4 @@ host = "localhost"
 port = "1312"
 password = "hackme"
 itemsPerPage = 100
-enableDownload = false
 path = "/var/www/ilil"

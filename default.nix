@@ -5,7 +5,7 @@ with lib;
 let
     ilil = pkgs.python3.pkgs.buildPythonApplication {
       pname = "ilil";
-      version = "unstable-20200819g";
+      version = "unstable-20200819p";
 
       src = lib.cleanSource ./.; 
 
@@ -40,7 +40,6 @@ let
         port = '${toString cfg.serverPort}'
         password = '${cfg.serverPassword}'
         itemsPerPage = '${toString cfg.serverItemsPerPage}'
-        enableDownload = '${boolToString cfg.serverEnableDownload}'
         path = '${cfg.serverPath}'
     '';
 
@@ -94,12 +93,6 @@ in {
       default = 100;
       type = types.ints.unsigned;
       description = "Items per page to display";
-    };
-
-    serverEnableDownload = mkOption {
-      default = false;
-      type = types.bool;
-      description = "If download of high-res images is allowed";
     };
 
     serverPath = mkOption {
